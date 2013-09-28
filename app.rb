@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'sinatra'
 require 'nokogiri'
 require 'open-uri'
@@ -5,6 +6,10 @@ require 'icalendar'
 require 'tmp_cache'
 
 include Icalendar
+
+class NamedCalendar < Calendar
+  ical_property 'x_wr_calname'
+end
 
 get '/' do
   '<h1>It works!</h1>'
@@ -34,7 +39,8 @@ get '/ics' do
   end
 
   # render
-  cal = Calendar.new
+  cal = NamedCalendar.new
+  cal.x_wr_calname = 'ニコニコアニメスペシャル'
   animes.each do |anime|
     cal.event do
       dtstart anime.start, {'TZID' => ['Asia/Tokyo']}
