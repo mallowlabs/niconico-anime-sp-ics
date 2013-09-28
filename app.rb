@@ -35,7 +35,7 @@ get '/ics' do
 
   # render
   cal = Calendar.new
-  cal.timezone { timezone_id 'Tokyo/Japan' }
+  cal.timezone { timezone_id 'Asia/Japan' }
   animes.each { |anime| cal.add_event(anime) }
   cal.to_ical
 end
