@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'icalendar'
 require 'tmp_cache'
+require 'digest/md5'
 
 include Icalendar
 
@@ -24,7 +25,7 @@ get '/ics' do
   animes = html.css('.g-live-list li div.p-live2').map do |div|
     anime = Event.new
     anime.summary = div.css('.g-live-title a').text.strip
-    anime.description = div.css('.g-live-title a').first.attributes['href'].text.strip
+    anime.url = div.css('.g-live-title a').first.attributes['href'].text.strip
 
     year = Time.now.year
     month_date = div.css('.g-live-airtime strong').text.strip
@@ -45,7 +46,8 @@ get '/ics' do
     cal.event do
       dtstart anime.start, {'TZID' => ['Asia/Tokyo']}
       summary anime.summary
-      description anime.description
+      url anime.url
+      uid "#{Digest::MD5.hexdigest(anime.url)}@#{Socket.gethostname}"
     end
   end
   cal.to_ical
