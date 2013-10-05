@@ -40,6 +40,7 @@ get '/ics' do
   end
 
   # render
+  host = request.host
   cal = NamedCalendar.new
   cal.x_wr_calname = 'ニコニコアニメスペシャル'
   animes.each do |anime|
@@ -47,7 +48,7 @@ get '/ics' do
       dtstart anime.start, {'TZID' => ['Asia/Tokyo']}
       summary anime.summary
       url anime.url
-      uid "#{Digest::MD5.hexdigest(anime.url)}@#{Socket.gethostname}"
+      uid "#{Digest::MD5.hexdigest(anime.url)}@#{host}"
     end
   end
   cal.to_ical
