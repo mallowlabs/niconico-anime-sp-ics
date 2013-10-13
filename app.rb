@@ -46,7 +46,7 @@ get '/ics' do
   animes.each do |anime|
     cal.event do
       dtstart anime.start, {'TZID' => ['Asia/Tokyo']}
-      summary anime.summary
+      summary normalize_title(anime.summary)
       url anime.url
       uid "#{Digest::MD5.hexdigest(anime.url)}@#{host}"
     end
@@ -57,4 +57,8 @@ end
 private
 def fetch(url, expire = 3600)
   TmpCache.get(url) || TmpCache.set(url, open(url).read, expire)
+end
+
+def normalize_title(title)
+  title.gsub(/^ニコニコアニメスペシャル/, '')
 end
