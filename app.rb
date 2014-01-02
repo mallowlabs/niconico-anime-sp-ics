@@ -35,6 +35,11 @@ get '/ics' do
     hour = time.split(':')[0].to_i
     minute = time.split(':')[1].to_i
 
+    if hour >= 24
+      hour -= 24
+      date += 1
+    end
+
     anime.start = DateTime.civil(year, month, date, hour, minute)
     anime
   end
