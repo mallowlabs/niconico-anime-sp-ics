@@ -22,7 +22,7 @@ get '/ics' do
 
   # parse
   html = Nokogiri::HTML(source, nil)
-  animes = html.css('.g-live-list li div.p-live2').map do |div|
+  animes = html.css('.g-live-list li div.p-live-body').map do |div|
     anime = Event.new
     anime.summary = div.css('.g-live-title a').text.strip
     anime.url = div.css('.g-live-title a').first.attributes['href'].text.strip
