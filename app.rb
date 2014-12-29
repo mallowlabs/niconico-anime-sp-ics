@@ -27,7 +27,6 @@ get '/ics' do
     anime.summary = div.css('.g-live-title a').text.strip
     anime.url = div.css('.g-live-title a').first.attributes['href'].text.strip
 
-    year = Time.now.year
     month_date = div.css('.g-live-airtime strong').text.strip
     month = month_date.split('/')[0].to_i
     date = month_date.split('/')[1].to_i
@@ -40,7 +39,8 @@ get '/ics' do
       date += 1
     end
 
-    anime.start = DateTime.civil(year, month, date, hour, minute)
+    start_in_this_year = DateTime.civil(Time.now.year, month, date, hour, minute)
+    anime.start = [start_in_this_year, start_in_this_year.next_year].min_by {|d| (d - DateTime.now).abs}
     anime
   end
 
