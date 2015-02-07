@@ -34,12 +34,8 @@ get '/ics' do
     hour = time.split(':')[0].to_i
     minute = time.split(':')[1].to_i
 
-    if hour >= 24
-      hour -= 24
-      date += 1
-    end
-
-    start_in_this_year = DateTime.civil(Time.now.year, month, date, hour, minute)
+    start_in_this_year = DateTime.civil(Time.now.year, month, date, (hour % 24), minute)
+    start_in_this_year = start_in_this_year.next_day if hour >= 24
     anime.start = [start_in_this_year, start_in_this_year.next_year].min_by {|d| (d - DateTime.now).abs}
     anime
   end
