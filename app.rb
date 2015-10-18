@@ -61,5 +61,8 @@ def fetch(url, expire = 3600)
 end
 
 def normalize_title(title)
-  title.gsub(/ニコニコアニメスペシャル/, '').gsub(/^【.+】/,'')
+  title
+    .gsub(/ニコニコアニメスペシャル/, '')
+    .gsub(/^【.+】/,'')
+    .gsub(/^(.*)(「[^」]*」)/) { "#{$2}#{$1}" }
 end
